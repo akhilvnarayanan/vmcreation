@@ -1,9 +1,8 @@
 name: Create-VM
 
-on:
-  push:
-    branches:
-      - main
+trigger:
+  branches:
+    - main
 
 jobs:
   deploy_vm:
