@@ -1,28 +1,39 @@
-name: Create-VM
-
 trigger:
-  branches:
-    - main
+- main
 
 jobs:
-  deploy_vm:
-    runs-on: ubuntu-latest
+- job: deploy_vm
+  pool:
+    vmImage: 'ubuntu-latest'
 
-    steps:
-    - name: Checkout Repository
-      uses: actions/checkout@v2
+  steps:
+  - checkout: self
 
-    - name: Deploy VM
-      run: |
+  - task: UseDotNet@2
+    inputs:
+      packageType: 'sdk'
+      version: '2.1.x'
+
+  - task: AzureCLI@2
+    inputs:
+      azureSubscription: '81e8e8cc-3aa1-4807-be10-37b6b990252f'
+      scriptType: 'bash'
+      scriptLocation: 'inlineScript'
+      inlineScript: |
         az group create --name VirtualMachines --location eastus
         az deployment group create --resource-group VirtualMachines --template-uri https://raw.githubusercontent.com/Azure/azure-quickstart-templates/master/101-vm-simple-linux/azuredeploy.json --parameters https://raw.githubusercontent.com/Azure/azure-quickstart-templates/master/101-vm-simple-linux/azuredeploy.parameters.json --parameters adminUsername=akhilvn@avnstudies.onmicrosoft.com servicePrincipalClientId=9d1f68a9-bc36-4e73-82b5-f2bee8ec1176 servicePrincipalSecret=-u.8Q~LwuEqQXvhSJs7EO7tfE7Ohn4fJPHkG.bZV vmName=test
 
-    - name: Set VM Outputs
-      run: |
+  - task: AzureCLI@2
+    inputs:
+      azureSubscription: '81e8e8cc-3aa1-4807-be10-37b6b990252f'
+      scriptType: 'bash'
+      scriptLocation: 'inlineScript'
+      inlineScript: |
         VM_IP=$(az vm show -d --resource-group VirtualMachines --name test --query publicIps --output tsv)
         echo "VM IP Address: $VM_IP"
-        echo "VM Outputs: $VM_IP" >> $GITHUB_ENV
+        echo "VM Outputs: $VM_IP" >> $(System.DefaultWorkingDirectory)/envFile
 
-    - name: Show VM Outputs
-      run: |
-        cat $GITHUB_ENV
+  - task: PublishPipelineArtifact@1
+    inputs:
+      targetPath: '$(System.DefaultWorkingDirectory)/envFile'
+      artifact: 'vmOutputs'
