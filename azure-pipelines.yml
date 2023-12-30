@@ -21,7 +21,7 @@ jobs:
     - name: Deploy VM
       run: |
         az group create --name VirtualMachines --location eastus
-        az deployment group create --resource-group VirtualMachines --template-uri https://raw.githubusercontent.com/Azure/azure-quickstart-templates/master/101-vm-simple-linux/azuredeploy.json --parameters https://raw.githubusercontent.com/Azure/azure-quickstart-templates/master/101-vm-simple-linux/azuredeploy.parameters.json --parameters adminUsername=<YourAdminUsername> adminPassword=<YourAdminPassword> vmName=test
+        az deployment group create --resource-group VirtualMachines --template-uri https://raw.githubusercontent.com/Azure/azure-quickstart-templates/master/101-vm-simple-linux/azuredeploy.json --parameters https://raw.githubusercontent.com/Azure/azure-quickstart-templates/master/101-vm-simple-linux/azuredeploy.parameters.json --parameters adminUsername=akhilvn@avnstudies.onmicrosoft.com servicePrincipalClientId=9d1f68a9-bc36-4e73-82b5-f2bee8ec1176 servicePrincipalSecret=-u.8Q~LwuEqQXvhSJs7EO7tfE7Ohn4fJPHkG.bZV vmName=test
 
     - name: Set VM Outputs
       run: |
