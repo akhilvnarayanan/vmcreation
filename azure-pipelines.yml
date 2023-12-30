@@ -25,7 +25,7 @@ jobs:
 
   - task: AzureCLI@2
     inputs:
-      azureSubscription: '81e8e8cc-3aa1-4807-be10-37b6b990252f'
+      azureSubscription: 'vm_creation_test'
       scriptType: 'bash'
       scriptLocation: 'inlineScript'
       inlineScript: |
